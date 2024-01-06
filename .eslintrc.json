@@ -1,6 +1,20 @@
 {
   "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "next",
+    "next/core-web-vitals",
     "prettier"
-  ]
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-duplicate-imports": ["error", { "includeExports": true }],
+    "consistent-return": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-var": "warn"
+  }
 }

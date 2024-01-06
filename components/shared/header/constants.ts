@@ -1,4 +1,4 @@
-import { HeaderLink } from "./model";
+import { HeaderLink } from './model';
 
 export const headerLinks: HeaderLink[] = [
   {
@@ -13,4 +13,4 @@ export const headerLinks: HeaderLink[] = [
     label: 'My Profile',
     route: '/profile',
   },
-]
+];
