@@ -1,5 +1,5 @@
 export interface NavItemsProps {
-  items: HeaderLink[]
+  items: HeaderLink[];
 }
 
 export interface HeaderLink {

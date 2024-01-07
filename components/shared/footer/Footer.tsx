@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="p-4 text-center">
+    <footer className="text-center px-4 py-6">
       {new Date().getFullYear()} Events. All Rights reserved
     </footer>
-  )
+  );
 }

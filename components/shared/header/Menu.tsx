@@ -1,11 +1,7 @@
-import { TextAlignLeftIcon } from "@radix-ui/react-icons"
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import NavItems from "./NavItems"
-import { headerLinks } from "./constants"
+import { TextAlignLeftIcon } from '@radix-ui/react-icons';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import NavItems from './NavItems';
+import { headerLinks } from './constants';
 
 export default function Menu() {
   return (
@@ -17,5 +13,5 @@ export default function Menu() {
         <NavItems items={headerLinks} />
       </SheetContent>
     </Sheet>
-  )
+  );
 }
