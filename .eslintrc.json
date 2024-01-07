@@ -12,9 +12,9 @@
   "rules": {
     "prettier/prettier": "error",
     "no-duplicate-imports": ["error", { "includeExports": true }],
-    "consistent-return": "error",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "no-var": "warn"
+    "no-var": "warn",
+    "@typescript-eslint/no-unused-vars": "warn"
   }
 }
