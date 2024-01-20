@@ -1,6 +1,6 @@
 import { revalidatePath } from 'next/cache';
 import { CreateUserParams, UpdateUserParams } from '@/types';
-import { handleError } from '@/lib/utils';
+import { handleError } from '@/utils';
 import dbConnect from '@/lib/database';
 import User from '@/lib/database/models/user.model';
 import Event from '@/lib/database/models/event.model';
