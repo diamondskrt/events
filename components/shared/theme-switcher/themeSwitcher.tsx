@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
-import { Button } from '../../ui/button';
+import { Button } from '@/components/ui/button';
 
 export default function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();

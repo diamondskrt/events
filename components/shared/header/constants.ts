@@ -10,6 +10,10 @@ export const headerLinks: HeaderLink[] = [
     route: '/events/create',
   },
   {
+    label: 'Create Category',
+    route: '/category/create',
+  },
+  {
     label: 'My Profile',
     route: '/profile',
   },
