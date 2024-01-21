@@ -54,7 +54,7 @@ export default function DatePicker({
         >
           <div className="flex items-center">
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, 'PPP') : <span>Pick a date</span>}
+            {date ? format(date, 'P') : <span>Pick a date</span>}
           </div>
           {allowClear && date && (
             <Cross2Icon

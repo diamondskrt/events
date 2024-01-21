@@ -134,7 +134,12 @@ export type RemoveUrlQueryParams = {
   keysToRemove: string[];
 };
 
-export type SearchParamProps = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+export type Pagination = {
+  page: number;
+  limit: number;
+  totalPages: number | null | undefined;
 };
+
+export interface SearchParamProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}

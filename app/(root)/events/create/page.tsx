@@ -8,7 +8,7 @@ export default function CreateEvent() {
 
   return (
     <section>
-      <div className="grid gap-6 container py-4">
+      <div className="flex flex-col gap-6 container py-4">
         <div className="prose lg:prose-xl dark:prose-invert max-w-none">
           <h3 className="text-center sm:text-left">Create Event</h3>
         </div>

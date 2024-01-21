@@ -18,6 +18,7 @@ import { formSchema } from './validator';
 import { initialValues } from './constants';
 import { createCategory } from '@/lib/actions/category.actions';
 import { cn } from '@/utils';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 interface CategoryFormProps {
   className: string;
@@ -28,6 +29,8 @@ export default function CategoryForm({ className }: CategoryFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
   });
+
+  const { isSubmitting } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -60,7 +63,8 @@ export default function CategoryForm({ className }: CategoryFormProps) {
           )}
         />
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           Create Category
         </Button>
       </form>

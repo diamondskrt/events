@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import {
   Form,
@@ -34,10 +36,8 @@ import { eventDefaultValues } from './constants';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getCategories } from '@/lib/actions/category.actions';
 import { ICategory } from '@/lib/database/models/category.model';
-import { toast } from 'sonner';
-import { useUploadThing } from '@/utils/uploadthing';
-import { useRouter } from 'next/navigation';
 import { createEvent, updateEvent } from '@/lib/actions/event.actions';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 export default function EventForm({
   userId,
@@ -45,13 +45,10 @@ export default function EventForm({
   className,
   event,
 }: EventFormProps) {
-  const [files, setFiles] = useState<File[]>([]);
   const router = useRouter();
 
-  const isUpdateForm = type === 'Update';
-
   const initialValues =
-    event && isUpdateForm
+    event && type === 'Update'
       ? {
           ...event,
           startDateTime: new Date(event.startDateTime),
@@ -64,6 +61,8 @@ export default function EventForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
   });
+
+  const { isSubmitting } = form.formState;
 
   const [categories, setCategories] = useState<ICategory[]>([]);
 
@@ -82,31 +81,13 @@ export default function EventForm({
 
   const disabledDays = [{ before: new Date() }];
 
-  const { startUpload } = useUploadThing('imageUploader');
-
-  const getUploadedImage = async () => {
+  const onCreateEvent = async (values: z.infer<typeof formSchema>) => {
     try {
-      const uploadedImages = await startUpload(files);
-      return uploadedImages?.[0].url;
-    } catch (error) {
-      toast.error('Poster has not been uploaded');
-    }
-  };
-
-  const onCreateEvent = async (
-    uploadedImageUrl: string | undefined,
-    values: z.infer<typeof formSchema>
-  ) => {
-    try {
-      if (!uploadedImageUrl) return;
-
       const newEvent = await createEvent({
-        event: { ...values, imageUrl: uploadedImageUrl },
+        event: { ...values },
         userId,
         path: '/profile',
       });
-
-      if (!newEvent) return;
 
       form.reset();
       router.push(`/events/${newEvent._id}`);
@@ -115,11 +96,8 @@ export default function EventForm({
     }
   };
 
-  const onUpdateEvent = async (
-    uploadedImageUrl: string | undefined,
-    values: z.infer<typeof formSchema>
-  ) => {
-    if (!(event?._id && uploadedImageUrl)) {
+  const onUpdateEvent = async (values: z.infer<typeof formSchema>) => {
+    if (!event?._id) {
       router.back();
       return;
     }
@@ -127,11 +105,9 @@ export default function EventForm({
     try {
       const updatedEvent = await updateEvent({
         userId,
-        event: { ...values, imageUrl: uploadedImageUrl, _id: event._id },
+        event: { ...values, _id: event._id },
         path: `/events/${event._id}`,
       });
-
-      if (!updatedEvent) return;
 
       form.reset();
       router.push(`/events/${updatedEvent._id}`);
@@ -141,18 +117,12 @@ export default function EventForm({
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const uploadedImageUrl = isUpdateForm
-      ? values.imageUrl
-      : await getUploadedImage();
-
-    if (!uploadedImageUrl) return;
-
     if (type === 'Create') {
-      onCreateEvent(uploadedImageUrl, values);
+      onCreateEvent(values);
     }
 
     if (type === 'Update') {
-      onUpdateEvent(uploadedImageUrl, values);
+      onUpdateEvent(values);
     }
   };
 
@@ -222,9 +192,8 @@ export default function EventForm({
               <FormLabel>Poster</FormLabel>
               <FormControl>
                 <FileUploader
-                  onFieldChange={field.onChange}
                   imageUrl={field.value}
-                  setFiles={setFiles}
+                  onFieldChange={field.onChange}
                 />
               </FormControl>
               <FormMessage />
@@ -330,7 +299,8 @@ export default function EventForm({
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           {type} Event
         </Button>
       </form>
