@@ -1,30 +1,38 @@
-import { Dispatch, SetStateAction, useCallback, MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import Image from 'next/image';
 import { generateClientDropzoneAccept } from 'uploadthing/client';
-import { TrashIcon } from '@radix-ui/react-icons';
+import { ReloadIcon, TrashIcon } from '@radix-ui/react-icons';
 import { useDropzone } from '@uploadthing/react/hooks';
 import { FileWithPath } from '@uploadthing/react';
 import { Button } from '@/components/ui/button';
-import { convertFileToUrl } from '@/utils';
+import { toast } from 'sonner';
+import { useUploadThing } from '@/utils/uploadthing';
 
 interface FileUploaderProps {
   imageUrl: string;
   onFieldChange: (url: string) => void;
-  setFiles: Dispatch<SetStateAction<File[]>>;
 }
 
 export default function FileUploader({
   imageUrl,
   onFieldChange,
-  setFiles,
 }: FileUploaderProps) {
-  const onDrop = useCallback(
-    (acceptedFiles: FileWithPath[]) => {
-      setFiles(acceptedFiles);
-      onFieldChange(convertFileToUrl(acceptedFiles[0]));
-    },
-    [setFiles, onFieldChange]
-  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { startUpload } = useUploadThing('imageUploader');
+
+  const onDrop = async (acceptedFiles: FileWithPath[]) => {
+    try {
+      setIsSubmitting(true);
+      const uploadedImages = await startUpload(acceptedFiles);
+      if (!uploadedImages?.[0]) return;
+
+      onFieldChange(uploadedImages[0].url);
+    } catch (error) {
+      toast.error('Poster has not been uploaded');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const imgFileTypes = 'image/*';
 
@@ -37,7 +45,6 @@ export default function FileUploader({
 
   const handleRemoveImage = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    setFiles([]);
     onFieldChange('');
   };
 
@@ -65,7 +72,8 @@ export default function FileUploader({
           </div>
         </div>
       ) : (
-        <Button type="button" className="rounded-full">
+        <Button type="button" disabled={isSubmitting} className="rounded-full">
+          {isSubmitting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           Upload file
         </Button>
       )}
