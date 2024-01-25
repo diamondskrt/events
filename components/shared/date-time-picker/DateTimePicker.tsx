@@ -5,7 +5,7 @@ import { add, parse } from 'date-fns';
 
 interface DateTimePickerProps {
   date: Date | undefined;
-  onDateChange: (date: Date | undefined) => void;
+  onDateChange: (date: Date | null) => void;
   disabledDays?: Matcher | Matcher[] | undefined;
   disabledTimes?: string[];
   allowClear?: boolean;
@@ -23,7 +23,7 @@ export default function DateTimePicker({
     onDateChange(newDate);
   };
 
-  const onChange = (newDate: Date | undefined) => {
+  const onChange = (newDate: Date | null) => {
     const formattedDate = newDate
       ? add(newDate, {
           hours: date?.getHours(),

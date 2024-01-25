@@ -42,13 +42,15 @@ export default async function Home({ searchParams }: HomeProps) {
               </Button>
             </div>
 
-            <Image
-              src="/assets/hero.png"
-              alt="hero"
-              width={1000}
-              height={1000}
-              className="max-h-[70vh] object-contain object-center 2xl:max-h-[60vh]"
-            />
+            <div className="bg-primary rounded-full py-6 px-4">
+              <Image
+                src="/assets/hero.png"
+                alt="hero"
+                width={1000}
+                height={1000}
+                className="max-h-[70vh] object-contain object-center 2xl:max-h-[60vh]"
+              />
+            </div>
           </div>
         </div>
       </section>

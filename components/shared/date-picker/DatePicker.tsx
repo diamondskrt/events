@@ -14,7 +14,7 @@ import {
 
 interface DatePickerProps {
   date: Date | undefined;
-  onDateChange: (date: Date | undefined) => void;
+  onDateChange: (date: Date | null) => void;
   disabledDays?: Matcher | Matcher[] | undefined;
   allowClear?: boolean;
 }
@@ -29,12 +29,12 @@ export default function DatePicker({
 
   const onSelect = (date: Date | undefined) => {
     setOpen(false);
-    onDateChange(date);
+    onDateChange(date!);
   };
 
   const onClear = (event: MouseEvent<SVGElement>) => {
     event.stopPropagation();
-    onDateChange(undefined);
+    onDateChange(null);
   };
 
   const onOpenChange = (value: boolean) => {

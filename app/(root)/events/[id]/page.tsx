@@ -8,6 +8,7 @@ import { format, isSameDay } from 'date-fns';
 import { CalendarIcon, GlobeIcon } from '@radix-ui/react-icons';
 import { Pagination, SearchParamProps } from '@/types';
 import { EventCollection } from '@/components/shared/event-collection';
+import { CheckoutBtn } from '@/components/shared/checkout-btn';
 
 interface EventDetailsProps extends SearchParamProps {
   params: {
@@ -72,6 +73,9 @@ export default async function EventDetails({
               {event.organizer.firstName} {event.organizer.lastName}
             </span>
           </p>
+
+          <CheckoutBtn event={event} />
+
           <div className="flex items-center gap-4">
             <CalendarIcon />
             <p>{getDateInterval(event.startDateTime, event.endDateTime)}</p>
