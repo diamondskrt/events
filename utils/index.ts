@@ -53,5 +53,5 @@ export function removeKeysFromQuery({
 }
 
 export const handleError = (error: unknown) => {
-  throw new Error(typeof error === 'string' ? error : JSON.stringify(error));
+  throw error;
 };
