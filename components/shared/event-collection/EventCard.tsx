@@ -1,4 +1,14 @@
-import { IEvent } from '@/lib/database/models/event.model';
+import { format } from 'date-fns';
+import { auth } from '@clerk/nextjs';
+import {
+  CalendarIcon,
+  ExternalLinkIcon,
+  GlobeIcon,
+  Pencil1Icon,
+} from '@radix-ui/react-icons';
+
+import Link from 'next/link';
+
 import {
   Card,
   CardContent,
@@ -6,22 +16,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CalendarIcon, GlobeIcon, Pencil1Icon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { auth } from '@clerk/nextjs';
-import RemoveEvent from './RemoveEvent';
 
-interface EventCardProps {
-  event: IEvent;
-}
+import RemoveEvent from './RemoveEvent';
+import { EventCardProps } from './model';
 
 export function EventCard({ event }: EventCardProps) {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
-  const isEventCreator = userId === event.organizer._id.toString();
+  const isEventCreator = userId === String(event.organizer._id);
 
   return (
     <Card>
@@ -42,6 +52,12 @@ export function EventCard({ event }: EventCardProps) {
               <CalendarIcon />
               <small>{format(event.startDateTime, 'Pp')}</small>
             </div>
+            <small>
+              by&nbsp;
+              <span className="text-primary">
+                {event.organizer.firstName} {event.organizer.lastName}
+              </span>
+            </small>
           </div>
           {isEventCreator && (
             <div className="flex gap-1">
@@ -59,16 +75,31 @@ export function EventCard({ event }: EventCardProps) {
         <p className="line-clamp-3">{event.description}</p>
       </CardContent>
       <CardFooter>
-        <div className="flex items-center gap-2">
-          <Button size="xs" className="rounded-full">
-            {event.isFree ? 'FREE' : `$ ${event.price}`}
-          </Button>
-          <Button size="xs" className="rounded-full">
-            {event.category.name}
-          </Button>
-          <small>
-            {event.organizer.firstName} {event.organizer.lastName}
-          </small>
+        <div className="flex justify-between w-full">
+          <div className="flex items-center gap-2">
+            <Button size="xs" className="rounded-full">
+              {event.isFree ? 'FREE' : `$ ${event.price}`}
+            </Button>
+            <Button size="xs" className="rounded-full">
+              {event.category.name}
+            </Button>
+          </div>
+          {isEventCreator && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/orders?eventId=${event._id}`}>
+                    <Button size="icon" variant="ghost">
+                      <ExternalLinkIcon />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Check Orders</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
       </CardFooter>
     </Card>

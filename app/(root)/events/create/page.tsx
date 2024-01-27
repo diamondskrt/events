@@ -1,6 +1,7 @@
+import { auth } from '@clerk/nextjs';
+
 import { EventForm } from '@/components/shared/event-form';
 import { EventFormTypes } from '@/components/shared/event-form/model';
-import { auth } from '@clerk/nextjs';
 
 export default function CreateEvent() {
   const { sessionClaims } = auth();

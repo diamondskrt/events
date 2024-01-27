@@ -1,15 +1,9 @@
-import { Matcher } from 'react-day-picker';
-import { DatePicker } from '@/components/shared/date-picker';
-import { TimePicker } from './TimePicker';
 import { add, parse } from 'date-fns';
 
-interface DateTimePickerProps {
-  date: Date | undefined;
-  onDateChange: (date: Date | null) => void;
-  disabledDays?: Matcher | Matcher[] | undefined;
-  disabledTimes?: string[];
-  allowClear?: boolean;
-}
+import { DatePicker } from '@/components/shared/date-picker';
+
+import { TimePicker } from './TimePicker';
+import { DateTimePickerProps } from './model';
 
 export default function DateTimePicker({
   date,

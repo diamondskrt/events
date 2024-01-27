@@ -1,30 +1,38 @@
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { EventCollection } from '@/components/shared/event-collection';
-import { Pagination, SearchParamProps } from '@/types';
-import { getAllEvents } from '@/lib/actions/event.actions';
 
-interface HomeProps extends SearchParamProps {}
+import { Button } from '@/components/ui/button';
+import { EventCollection } from '@/components/shared/event-collection';
+import { InputSearch } from '@/components/shared/input-search';
+import { FilterCategory } from '@/components/shared/filter-category';
+import { getAllEvents } from '@/lib/actions/event.actions';
+import { Pagination } from '@/types';
+
+interface HomeProps {
+  searchParams: {
+    page?: number;
+    query?: string;
+    categoryId?: string;
+  };
+}
 
 export default async function Home({ searchParams }: HomeProps) {
-  const pagination: Pagination = {
-    page: Number(searchParams?.page) || 1,
-    limit: 6,
-    totalPages: null,
-  };
+  const { page = '1', categoryId = '', query: searchText = '' } = searchParams;
 
-  const searchText = (searchParams?.query as string) || '';
-  const category = (searchParams?.category as string) || '';
+  const pagination: Pagination = {
+    page: Number(page),
+    limit: 6,
+    totalPages: 1,
+  };
 
   const events = await getAllEvents({
     query: searchText,
-    category,
+    categoryId,
     page: pagination.page,
     limit: pagination.limit,
   });
 
-  pagination.totalPages = events?.totalPages;
+  pagination.totalPages = events?.totalPages || 1;
 
   return (
     <>
@@ -37,12 +45,12 @@ export default async function Home({ searchParams }: HomeProps) {
                 Book and learn helpful tips from 3,168+ mentors in world-class
                 companies with our global community.
               </p>
-              <Button>
-                <Link href="#events">Explore Now</Link>
-              </Button>
+              <Link href="#events">
+                <Button>Explore Now</Button>
+              </Link>
             </div>
 
-            <div className="bg-primary rounded-full py-6 px-4">
+            <div className="2xl:bg-primary rounded-full py-6 px-4">
               <Image
                 src="/assets/hero.png"
                 alt="hero"
@@ -63,11 +71,16 @@ export default async function Home({ searchParams }: HomeProps) {
             </h2>
           </div>
 
-          <EventCollection
-            events={events?.data}
-            collectionType="All_Events"
-            pagination={pagination}
-          />
+          <div className="flex gap-4">
+            <div className="w-[350px]">
+              <InputSearch placeholder="Search by Title" />
+            </div>
+            <div className="w-[250px]">
+              <FilterCategory />
+            </div>
+          </div>
+
+          <EventCollection events={events?.data} pagination={pagination} />
         </div>
       </section>
     </>

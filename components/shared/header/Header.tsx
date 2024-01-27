@@ -1,17 +1,20 @@
-import Link from 'next/link';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
+
+import Link from 'next/link';
+
 import { ThemeSwitcher } from '@/components/shared/theme-switcher';
+import { Icon } from '@/components/shared/icon';
 import { Button } from '@/components/ui/button';
+
 import Menu from './Menu';
 import User from './User';
-import { AppIcon } from '@/components/shared/app-icon';
 
 export default function Header() {
   return (
     <header className="shadow-md p-4 py-6 py-md-2">
       <div className="flex items-center justify-between">
         <Link href="/">
-          <AppIcon name="logo" className="black dark:white" />
+          <Icon name="logo" className="w-8 h-8 black dark:white" />
         </Link>
 
         <div className="flex items-center gap-4">

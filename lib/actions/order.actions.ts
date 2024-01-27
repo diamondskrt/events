@@ -1,19 +1,23 @@
 'use server';
 
 import Stripe from 'stripe';
+import { ObjectId } from 'mongodb';
+
+import { redirect } from 'next/navigation';
+
+import dbConnect from '@/lib/database';
+import Category from '@/lib/database/models/category.model';
+import Order from '@/lib/database/models/order.model';
+import Event from '@/lib/database/models/event.model';
+import User from '@/lib/database/models/user.model';
+
 import {
   CheckoutOrderParams,
   CreateOrderParams,
   GetOrdersByEventParams,
   GetOrdersByUserParams,
 } from '@/types';
-import { redirect } from 'next/navigation';
 import { handleError } from '@/utils';
-import dbConnect from '@/lib/database';
-import Order from '../database/models/order.model';
-import Event from '../database/models/event.model';
-import { ObjectId } from 'mongodb';
-import User from '../database/models/user.model';
 
 export const checkoutOrder = async (order: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
@@ -111,7 +115,7 @@ export async function getOrdersByEvent({
         $match: {
           $and: [
             { eventId: eventObjectId },
-            { buyer: { $regex: RegExp(searchString, 'i') } },
+            { buyer: { $regex: RegExp(searchString || '', 'i') } },
           ],
         },
       },
@@ -146,6 +150,15 @@ export async function getOrdersByUser({
           path: 'organizer',
           model: User,
           select: '_id firstName lastName',
+        },
+      })
+      .populate({
+        path: 'event',
+        model: Event,
+        populate: {
+          path: 'category',
+          model: Category,
+          select: '_id name',
         },
       });
 

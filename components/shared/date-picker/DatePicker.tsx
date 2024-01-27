@@ -1,9 +1,7 @@
 import { MouseEvent, useState } from 'react';
-import { Matcher } from 'react-day-picker';
 import { format } from 'date-fns';
 import { CalendarIcon, Cross2Icon } from '@radix-ui/react-icons';
 
-import { cn } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -11,13 +9,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { cn } from '@/utils';
 
-interface DatePickerProps {
-  date: Date | undefined;
-  onDateChange: (date: Date | null) => void;
-  disabledDays?: Matcher | Matcher[] | undefined;
-  allowClear?: boolean;
-}
+import { DatePickerProps } from './model';
 
 export default function DatePicker({
   date,
@@ -37,12 +31,8 @@ export default function DatePicker({
     onDateChange(null);
   };
 
-  const onOpenChange = (value: boolean) => {
-    setOpen(value);
-  };
-
   return (
-    <Popover open={open} onOpenChange={onOpenChange}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
