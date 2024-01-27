@@ -1,11 +1,11 @@
-'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { clsx } from 'clsx';
+
+import { cn } from '@/utils';
+
 import { NavItemsProps, HeaderLink } from './model';
 
-export default function NavItems({ items }: NavItemsProps) {
+export default function NavItems({ items, setOpen }: NavItemsProps) {
   const pathname = usePathname();
 
   return (
@@ -14,17 +14,14 @@ export default function NavItems({ items }: NavItemsProps) {
         const isActive = pathname === item.route;
 
         return (
-          <li key={item.label}>
-            <Link
-              href={item.route}
-              className={clsx([
-                'hover:opacity-70',
-                { 'text-blue-500': isActive },
-              ])}
-            >
-              {item.label}
-            </Link>
-          </li>
+          <Link
+            key={item.label}
+            href={item.route}
+            className={cn(['hover:opacity-70', { 'text-blue-500': isActive }])}
+            onClick={() => setOpen(false)}
+          >
+            <li>{item.label}</li>
+          </Link>
         );
       })}
     </ul>

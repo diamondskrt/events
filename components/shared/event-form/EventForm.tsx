@@ -1,43 +1,39 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { ReloadIcon } from '@radix-ui/react-icons';
+
+import { useState, useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { FileUploader } from '@/components/shared/file-uploader';
 import { DateTimePicker } from '@/components/shared/date-time-picker';
-
-import { cn } from '@/utils';
-
-import { EventFormProps } from './model';
-import { formSchema } from './validator';
-import { eventDefaultValues } from './constants';
-import { Checkbox } from '@/components/ui/checkbox';
+import { SelectCategory } from '@/components/shared/select-category';
+import { createEvent, updateEvent } from '@/lib/actions/event.actions';
 import { getCategories } from '@/lib/actions/category.actions';
 import { ICategory } from '@/lib/database/models/category.model';
-import { createEvent, updateEvent } from '@/lib/actions/event.actions';
-import { ReloadIcon } from '@radix-ui/react-icons';
+import { cn } from '@/utils';
+
+import { formSchema } from './validator';
+import { eventDefaultValues, maxDescriptionLength } from './constants';
+import { EventFormProps } from './model';
 
 export default function EventForm({
   userId,
@@ -45,6 +41,21 @@ export default function EventForm({
   className,
   event,
 }: EventFormProps) {
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const onGetCategories = async () => {
+    try {
+      const categoryList = await getCategories();
+      setCategories(categoryList);
+    } catch (error) {
+      toast.error('Categories has not been loaded');
+    }
+  };
+
+  useEffect(() => {
+    onGetCategories();
+  }, []);
+
   const router = useRouter();
 
   const initialValues =
@@ -63,21 +74,6 @@ export default function EventForm({
   });
 
   const { isSubmitting } = form.formState;
-
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  const onGetCategories = async () => {
-    try {
-      const categoryList = await getCategories();
-      setCategories(categoryList);
-    } catch (error) {
-      toast.error('Categories has not been loaded');
-    }
-  };
-
-  useEffect(() => {
-    onGetCategories();
-  }, []);
 
   const disabledDays = [{ before: new Date() }];
 
@@ -152,20 +148,11 @@ export default function EventForm({
             return (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category._id} value={category._id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SelectCategory
+                  categoryId={field.value}
+                  categories={categories}
+                  onChange={field.onChange}
+                />
                 <FormMessage />
               </FormItem>
             );
@@ -180,6 +167,9 @@ export default function EventForm({
               <FormControl>
                 <Textarea placeholder="Event description" rows={4} {...field} />
               </FormControl>
+              <FormDescription>
+                {field.value.length} / {maxDescriptionLength}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

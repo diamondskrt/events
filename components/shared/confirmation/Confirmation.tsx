@@ -1,4 +1,3 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -6,12 +5,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-interface ConfirmationProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  confirm: () => void;
-  children: ReactNode;
-}
+import { ConfirmationProps } from './model';
 
 export default function Confirmation({
   open,
@@ -19,12 +13,8 @@ export default function Confirmation({
   confirm,
   children,
 }: ConfirmationProps) {
-  const onOpenChange = (value: boolean) => {
-    setOpen(value);
-  };
-
   return (
-    <Popover open={open} onOpenChange={onOpenChange}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">

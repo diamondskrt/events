@@ -1,13 +1,10 @@
+import { auth } from '@clerk/nextjs';
+
 import { EventForm } from '@/components/shared/event-form';
 import { EventFormTypes } from '@/components/shared/event-form/model';
 import { getEventById } from '@/lib/actions/event.actions';
-import { auth } from '@clerk/nextjs';
 
-interface UpdateEventProps {
-  params: {
-    id: string;
-  };
-}
+import { UpdateEventProps } from '../model';
 
 export default async function UpdateEvent({ params }: UpdateEventProps) {
   const { sessionClaims } = auth();

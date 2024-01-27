@@ -1,13 +1,23 @@
 import * as z from 'zod';
 
+import {
+  defaultMinLength,
+  defaultMaxLength,
+  minDescriptionLength,
+  maxDescriptionLength,
+} from './constants';
+
 export const formSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(3, {
-      message: 'Title must be at least 3 characters.',
+    .min(defaultMinLength, {
+      message: `Title must be at least ${defaultMinLength} characters`,
     })
-    .max(20, 'Title must be less than 20 characters'),
+    .max(
+      defaultMaxLength,
+      `Title must be less than ${defaultMaxLength} characters`
+    ),
   categoryId: z.string({
     required_error: 'Category is required',
   }),
@@ -15,13 +25,25 @@ export const formSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, 'Description must be at least 10 characters')
-    .max(600, 'Description must be less than 600 characters'),
+    .min(
+      minDescriptionLength,
+      `Description must be at least ${minDescriptionLength} characters`
+    )
+    .max(
+      maxDescriptionLength,
+      `Description must be less than ${maxDescriptionLength} characters`
+    ),
   location: z
     .string()
     .trim()
-    .min(3, 'Location must be at least 3 characters')
-    .max(20, 'Location must be less than 20 characters'),
+    .min(
+      defaultMinLength,
+      `Location must be at least ${defaultMinLength} characters`
+    )
+    .max(
+      defaultMaxLength,
+      `Location must be less than ${defaultMaxLength} characters`
+    ),
   startDateTime: z.date(),
   endDateTime: z.date(),
   price: z.string().trim(),

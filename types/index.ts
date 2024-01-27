@@ -56,7 +56,7 @@ export type DeleteEventParams = {
 
 export type GetAllEventsParams = {
   query: string;
-  category: string;
+  categoryId: string;
   limit: number;
   page: number;
 };
@@ -70,7 +70,7 @@ export type GetEventsByUserParams = {
 export type GetRelatedEventsByCategoryParams = {
   categoryId: string;
   eventId: string;
-  limit?: number;
+  limit: number;
   page: number | string;
 };
 
@@ -114,7 +114,7 @@ export type CreateOrderParams = {
 
 export type GetOrdersByEventParams = {
   eventId: string;
-  searchString: string;
+  searchString: string | undefined;
 };
 
 export type GetOrdersByUserParams = {
@@ -137,9 +137,5 @@ export type RemoveUrlQueryParams = {
 export type Pagination = {
   page: number;
   limit: number;
-  totalPages: number | null | undefined;
+  totalPages: number;
 };
-
-export interface SearchParamProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}

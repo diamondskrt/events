@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { format } from 'date-fns';
+
 import {
   Select,
   SelectContent,
@@ -6,13 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { format } from 'date-fns';
 
-interface TimePickerProps {
-  date: Date | undefined;
-  onValueChange: (value: string) => void;
-  disabledTimes?: string[];
-}
+import { TimePickerProps } from './model';
 
 export function TimePicker({
   date,
@@ -25,8 +22,8 @@ export function TimePicker({
       const hours = Math.floor(adjustedIndex / 2);
       const minutes = (adjustedIndex % 2) * 30;
       const period = hours >= 12 ? 'AM' : 'PM';
-      const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-      const formattedMinutes = minutes.toString().padStart(2, '0');
+      const formattedHours = String(hours % 12 || 12).padStart(2, '0');
+      const formattedMinutes = String(minutes).padStart(2, '0');
       return `${formattedHours}:${formattedMinutes} ${period}`;
     });
   };

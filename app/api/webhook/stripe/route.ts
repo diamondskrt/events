@@ -1,5 +1,7 @@
 import stripe from 'stripe';
+
 import { NextResponse } from 'next/server';
+
 import { createOrder } from '@/lib/actions/order.actions';
 
 export async function POST(request: Request) {
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
         stripeId: id,
         eventId: metadata?.eventId || '',
         buyerId: metadata?.buyerId || '',
-        totalAmount: amount_total ? (amount_total / 100).toString() : '0',
+        totalAmount: amount_total ? String(amount_total / 100) : '0',
         createdAt: new Date(),
       };
 

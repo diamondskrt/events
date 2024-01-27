@@ -17,8 +17,8 @@ import {
   GetRelatedEventsByCategoryParams,
 } from '@/types';
 
-const getCategoryByName = async (name: string) => {
-  return Category.findOne({ name: { $regex: name, $options: 'i' } });
+const getCategoryById = async (id: string) => {
+  return Category.findById(id);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,7 +103,7 @@ export async function getAllEvents({
   query,
   limit = 6,
   page,
-  category,
+  categoryId,
 }: GetAllEventsParams) {
   try {
     await dbConnect();
@@ -111,8 +111,8 @@ export async function getAllEvents({
     const titleCondition = query
       ? { title: { $regex: query, $options: 'i' } }
       : {};
-    const categoryCondition = category
-      ? await getCategoryByName(category)
+    const categoryCondition = categoryId
+      ? await getCategoryById(categoryId)
       : null;
     const conditions = {
       $and: [
@@ -170,8 +170,8 @@ export async function getEventsByUser({
 export async function getRelatedEventsByCategory({
   categoryId,
   eventId,
-  limit = 3,
-  page = 1,
+  limit,
+  page,
 }: GetRelatedEventsByCategoryParams) {
   try {
     await dbConnect();

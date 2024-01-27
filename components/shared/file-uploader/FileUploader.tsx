@@ -1,17 +1,17 @@
-import { MouseEvent, useState } from 'react';
-import Image from 'next/image';
+import { toast } from 'sonner';
 import { generateClientDropzoneAccept } from 'uploadthing/client';
 import { ReloadIcon, TrashIcon } from '@radix-ui/react-icons';
 import { useDropzone } from '@uploadthing/react/hooks';
 import { FileWithPath } from '@uploadthing/react';
+
+import { MouseEvent, useState } from 'react';
+
+import Image from 'next/image';
+
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { useUploadThing } from '@/utils/uploadthing';
 
-interface FileUploaderProps {
-  imageUrl: string;
-  onFieldChange: (url: string) => void;
-}
+import { FileUploaderProps } from './model';
 
 export default function FileUploader({
   imageUrl,

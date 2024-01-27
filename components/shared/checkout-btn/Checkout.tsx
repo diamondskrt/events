@@ -1,12 +1,9 @@
 import { loadStripe } from '@stripe/stripe-js';
+
 import { Button } from '@/components/ui/button';
 import { checkoutOrder } from '@/lib/actions/order.actions';
-import { IEvent } from '@/lib/database/models/event.model';
 
-interface CheckoutProps {
-  event: IEvent;
-  userId: string;
-}
+import { CheckoutProps } from './models';
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 

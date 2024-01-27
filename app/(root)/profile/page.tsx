@@ -1,32 +1,27 @@
+import { PlusIcon } from '@radix-ui/react-icons';
+import { auth } from '@clerk/nextjs';
+
+import Link from 'next/link';
+
 import { EventCollection } from '@/components/shared/event-collection';
 import { Button } from '@/components/ui/button';
 import { getEventsByUser } from '@/lib/actions/event.actions';
 import { getOrdersByUser } from '@/lib/actions/order.actions';
 import { IOrder } from '@/lib/database/models/order.model';
-import { Pagination, SearchParamProps } from '@/types';
-import { auth } from '@clerk/nextjs';
-import { PlusIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
 
-interface ProfileProps extends SearchParamProps {}
-
-export default async function Profile({ searchParams }: ProfileProps) {
+export default async function Profile() {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
-  const pagination: Pagination = {
-    page: Number(searchParams?.page) || 1,
-    limit: 6,
-    totalPages: null,
-  };
+  const orders = await getOrdersByUser({ userId, page: 1 });
 
-  const ordersPage = Number(searchParams?.ordersPage) || 1;
-  const eventsPage = Number(searchParams?.eventsPage) || 1;
+  const orderedEvents =
+    orders?.data.map((order: IOrder) => order.event).filter(Boolean) || [];
 
-  const orders = await getOrdersByUser({ userId, page: ordersPage });
-
-  const orderedEvents = orders?.data.map((order: IOrder) => order.event) || [];
-  const organizedEvents = await getEventsByUser({ userId, page: eventsPage });
+  const organizedEvents = await getEventsByUser({
+    userId,
+    page: 1,
+  });
 
   return (
     <section>
@@ -35,11 +30,7 @@ export default async function Profile({ searchParams }: ProfileProps) {
           <h3 className="text-center sm:text-left">My Tickets</h3>
         </div>
 
-        <EventCollection
-          events={orderedEvents}
-          collectionType="My_Tickets"
-          pagination={pagination}
-        />
+        <EventCollection events={orderedEvents} />
       </div>
 
       <div className="flex flex-col gap-6 container py-4">
@@ -54,11 +45,7 @@ export default async function Profile({ searchParams }: ProfileProps) {
           </Button>
         </Link>
 
-        <EventCollection
-          events={organizedEvents?.data}
-          collectionType="Events_Organized"
-          pagination={pagination}
-        />
+        <EventCollection events={organizedEvents?.data} />
       </div>
     </section>
   );

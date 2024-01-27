@@ -4,6 +4,8 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { ReloadIcon } from '@radix-ui/react-icons';
+
 import {
   Form,
   FormControl,
@@ -14,15 +16,12 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { formSchema } from './validator';
-import { initialValues } from './constants';
 import { createCategory } from '@/lib/actions/category.actions';
 import { cn } from '@/utils';
-import { ReloadIcon } from '@radix-ui/react-icons';
 
-interface CategoryFormProps {
-  className: string;
-}
+import { formSchema } from './validator';
+import { initialValues } from './constants';
+import { CategoryFormProps } from './models';
 
 export default function CategoryForm({ className }: CategoryFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({

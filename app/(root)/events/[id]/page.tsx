@@ -1,40 +1,27 @@
+import { format, isSameDay } from 'date-fns';
+import { CalendarIcon, GlobeIcon } from '@radix-ui/react-icons';
+
 import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
+import { EventCollection } from '@/components/shared/event-collection';
+import { CheckoutBtn } from '@/components/shared/checkout-btn';
 import {
   getEventById,
   getRelatedEventsByCategory,
 } from '@/lib/actions/event.actions';
-import { Button } from '@/components/ui/button';
-import { format, isSameDay } from 'date-fns';
-import { CalendarIcon, GlobeIcon } from '@radix-ui/react-icons';
-import { Pagination, SearchParamProps } from '@/types';
-import { EventCollection } from '@/components/shared/event-collection';
-import { CheckoutBtn } from '@/components/shared/checkout-btn';
 
-interface EventDetailsProps extends SearchParamProps {
-  params: {
-    id: string;
-  };
-}
+import { EventDetailsProps } from './model';
 
-export default async function EventDetails({
-  params,
-  searchParams,
-}: EventDetailsProps) {
-  const pagination: Pagination = {
-    page: Number(searchParams?.page) || 1,
-    limit: 6,
-    totalPages: null,
-  };
-
+export default async function EventDetails({ params }: EventDetailsProps) {
   const event = await getEventById(params.id);
 
   const relatedEvents = await getRelatedEventsByCategory({
     categoryId: event.category._id,
     eventId: event._id,
-    page: String(pagination.page),
+    limit: 3,
+    page: 1,
   });
-
-  pagination.totalPages = relatedEvents?.totalPages;
 
   const getDateInterval = (startDateTime: Date, endDateTime: Date) => {
     const endDate = isSameDay(startDateTime, endDateTime)
@@ -96,11 +83,7 @@ export default async function EventDetails({
           <h3 className="text-center sm:text-left">Related Events</h3>
         </div>
 
-        <EventCollection
-          events={relatedEvents?.data}
-          collectionType="Related_Events"
-          pagination={pagination}
-        />
+        <EventCollection events={relatedEvents?.data} />
       </div>
     </section>
   );
