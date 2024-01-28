@@ -2,7 +2,7 @@
 
 import { toast } from 'sonner';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -13,13 +13,17 @@ import { formUrlQuery, removeKeysFromQuery } from '@/utils';
 
 export default function FilterCategory() {
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
 
   const onGetCategories = async () => {
     try {
+      setIsCategoriesLoading(true);
       const categoryList = await getCategories();
       setCategories([{ _id: 'all', name: 'All' }, ...categoryList]);
     } catch (error) {
       toast.error('Categories has not been loaded');
+    } finally {
+      setIsCategoriesLoading(false);
     }
   };
 
@@ -32,7 +36,7 @@ export default function FilterCategory() {
 
   const [categoryId, setCategoryId] = useState('all');
 
-  const setQueryParams = useCallback(() => {
+  const setQueryParams = (categoryId: string) => {
     const newUrl =
       categoryId && categoryId !== 'all'
         ? formUrlQuery({
@@ -46,20 +50,18 @@ export default function FilterCategory() {
           });
 
     router.push(newUrl, { scroll: false });
-  }, [categoryId, router, searchParams]);
-
-  useEffect(() => {
-    setQueryParams();
-  }, [categoryId, setQueryParams]);
+  };
 
   const onChange = (categoryId: string) => {
     setCategoryId(categoryId);
+    setQueryParams(categoryId);
   };
 
   return (
     <SelectCategory
       categoryId={categoryId}
       categories={categories}
+      loading={isCategoriesLoading}
       onChange={onChange}
     />
   );

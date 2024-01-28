@@ -17,10 +17,13 @@ export default function NavItems({ items, setOpen }: NavItemsProps) {
           <Link
             key={item.label}
             href={item.route}
-            className={cn(['hover:opacity-70', { 'text-blue-500': isActive }])}
+            className={cn([
+              'flex hover:opacity-70 my-2',
+              { 'text-blue-500': isActive },
+            ])}
             onClick={() => setOpen(false)}
           >
-            <li>{item.label}</li>
+            <li className="font-black text-3xl">{item.label}</li>
           </Link>
         );
       })}
