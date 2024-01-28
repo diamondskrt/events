@@ -11,10 +11,11 @@ import { SelectCategoryProps } from './model';
 export default function SelectCategory({
   categoryId,
   categories,
+  loading,
   onChange,
 }: SelectCategoryProps) {
   return (
-    <Select onValueChange={onChange} value={categoryId}>
+    <Select onValueChange={onChange} disabled={loading} value={categoryId}>
       <SelectTrigger>
         <SelectValue placeholder="Select category" />
       </SelectTrigger>

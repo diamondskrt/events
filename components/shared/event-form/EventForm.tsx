@@ -42,13 +42,17 @@ export default function EventForm({
   event,
 }: EventFormProps) {
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
 
   const onGetCategories = async () => {
     try {
+      setIsCategoriesLoading(true);
       const categoryList = await getCategories();
       setCategories(categoryList);
     } catch (error) {
       toast.error('Categories has not been loaded');
+    } finally {
+      setIsCategoriesLoading(false);
     }
   };
 
@@ -151,6 +155,7 @@ export default function EventForm({
                 <SelectCategory
                   categoryId={field.value}
                   categories={categories}
+                  loading={isCategoriesLoading}
                   onChange={field.onChange}
                 />
                 <FormMessage />
