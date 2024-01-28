@@ -1,18 +1,8 @@
-<div align="center">
-  <a href="https://youtu.be/zgGhzuBZOQg" target="_blank">
-    <img src="https://github.com/adrianhajdin/event_platform/assets/151519281/548975af-f0ed-4103-8834-fe93cf91862e" alt="Project Banner">
-  </a>
+# A Full Stack Next 14 Events App
 
-  <br />
+See demo here: [https://next14-events.vercel.app/](https://next14-events.vercel.app/)
 
-  <div>
-    <img src="https://img.shields.io/badge/-Next_JS_14-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="Next.js" />
-    <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/-Stripe-black?style=for-the-badge&logoColor=white&logo=stripe&color=008CDD" alt="stripe" />
-  </div>
-
-  <h3 align="center">A Full Stack Next 14 Events App</h3>
-</div>
+![next13-grafbase](https://github.com/diamondskrt/events/blob/main/public/assets/banner.png?raw=true)
 
 ## 📋 <a name="table">Table of Contents</a>
 
@@ -63,7 +53,10 @@ Built on Next.js 14, the events application stands as a comprehensive, full-stac
     
 **Search Orders:** Quick and efficient search functionality for orders, facilitating easy tracking and management.
 
-and many more, including code architecture and reusability 
+and many more, including code architecture and reusability
+
+
+## <a name="getting-started">🚨 Getting Started</a>
 
 <p align="center">
   <a href="https://nextjs.org">
@@ -89,8 +82,6 @@ and many more, including code architecture and reusability
     <img alt="" src="https://img.shields.io/badge/Join%20the%20community-blueviolet.svg?style=for-the-badge&logo=Next.js&labelColor=000000&logoWidth=20">
   </a>
 </p>
-
-## <a name="getting-started">🚨 Getting Started</a>
 
 Visit <a aria-label="next.js learn" href="https://nextjs.org/learn">https://nextjs.org/learn</a> to get started with Next.js.
 
