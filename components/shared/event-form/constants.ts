@@ -9,6 +9,6 @@ export const eventDefaultValues = {
 };
 
 export const defaultMinLength = 3;
-export const defaultMaxLength = 20;
+export const defaultMaxLength = 50;
 export const minDescriptionLength = 10;
 export const maxDescriptionLength = 600;
