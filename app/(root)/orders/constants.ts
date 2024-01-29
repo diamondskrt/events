@@ -1,6 +1,6 @@
 import { Column } from '@/components/shared/table';
 import { Source } from './models';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export const columns: Column<Source>[] = [
   {
@@ -18,7 +18,7 @@ export const columns: Column<Source>[] = [
   {
     title: 'CreatedAt',
     dataIndex: 'createdAt',
-    render: (value) => format(value, 'dd.MM.yyy'),
+    render: (value) => format(parseISO(value), 'dd.MM.yyy'),
   },
   {
     title: 'Amount',

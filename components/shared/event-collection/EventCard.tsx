@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { auth } from '@clerk/nextjs';
 import {
   CalendarIcon,
@@ -50,7 +50,7 @@ export function EventCard({ event }: EventCardProps) {
             </div>
             <div className="flex items-center gap-4">
               <CalendarIcon />
-              <small>{format(event.startDateTime, 'Pp')}</small>
+              <small>{format(parseISO(event.startDateTime), 'Pp')}</small>
             </div>
             <small>
               by&nbsp;
