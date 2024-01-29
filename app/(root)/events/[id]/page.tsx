@@ -1,4 +1,4 @@
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, parseISO } from 'date-fns';
 import { CalendarIcon, GlobeIcon } from '@radix-ui/react-icons';
 
 import Image from 'next/image';
@@ -23,11 +23,11 @@ export default async function EventDetails({ params }: EventDetailsProps) {
     page: 1,
   });
 
-  const getDateInterval = (startDateTime: Date, endDateTime: Date) => {
-    const endDate = isSameDay(startDateTime, endDateTime)
-      ? format(endDateTime, 'hh:mm a')
-      : format(endDateTime, 'Pp');
-    return `${format(startDateTime, 'Pp')} - ${endDate}`;
+  const getDateInterval = (startDateTime: string, endDateTime: string) => {
+    const endDate = isSameDay(parseISO(startDateTime), parseISO(endDateTime))
+      ? format(parseISO(endDateTime), 'hh:mm a')
+      : format(parseISO(endDateTime), 'Pp');
+    return `${format(parseISO(startDateTime), 'Pp')} - ${endDate}`;
   };
 
   return (

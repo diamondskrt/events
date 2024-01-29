@@ -1,6 +1,6 @@
 export interface Source {
   _id: string;
-  createdAt: Date;
+  createdAt: string;
   totalAmount: string;
   eventTitle: string;
   eventId: string;
