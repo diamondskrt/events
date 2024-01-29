@@ -1,5 +1,5 @@
 import { EventCard } from './EventCard';
-import { EventPagination } from './EventPagination';
+import { Pagination } from '@/components/shared/pagination';
 import { EventCollectionProps } from './model';
 
 export default function EventCollection({
@@ -19,7 +19,7 @@ export default function EventCollection({
           </div>
 
           {pagination && pagination.totalPages > 1 && (
-            <EventPagination totalPages={pagination.totalPages} />
+            <Pagination totalPages={pagination.totalPages} />
           )}
         </>
       ) : (

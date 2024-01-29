@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   Pagination as PaginationUI,
@@ -8,16 +12,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { cn } from '@/utils';
+import { cn, formUrlQuery } from '@/utils';
 
 import PaginationItems from './PaginationItems';
 import { PaginationProps } from './model';
 
-export default function Pagination({
-  activePage,
-  setActivePage,
-  totalPages,
-}: PaginationProps) {
+export default function Pagination({ totalPages }: PaginationProps) {
+  const [activePage, setActivePage] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const setQueryParams = useCallback(() => {
+    const newUrl = formUrlQuery({
+      params: String(searchParams),
+      key: 'page',
+      value: String(activePage),
+    });
+
+    router.push(newUrl, { scroll: false });
+  }, [activePage, router, searchParams]);
+
   const getGeneratedItems = () => {
     if (totalPages > 7) {
       return [3, 4, 5];
@@ -46,10 +60,23 @@ export default function Pagination({
   const onIncrement = () => {
     if (activePage === totalPages) return;
 
-    setActivePage(activePage + 1);
+    onSetActivePage(activePage + 1);
+  };
+
+  const onDecrement = () => {
+    if (activePage === 1) return;
+
+    onSetActivePage(activePage - 1);
+  };
+
+  const onSetActivePage = (page: number) => {
+    setActivePage(page);
+    document.querySelector('#events')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
+    setQueryParams();
+
     if (totalPages <= 7) return;
 
     const newArr = Array.from({ length: 3 }, (_, index) => {
@@ -63,13 +90,7 @@ export default function Pagination({
     });
 
     setGeneratedPaginationItems(newArr);
-  }, [activePage, totalPages]);
-
-  const onDecrement = () => {
-    if (activePage === 1) return;
-
-    setActivePage(activePage - 1);
-  };
+  }, [activePage, totalPages, setQueryParams]);
 
   return (
     <PaginationUI>
@@ -84,12 +105,12 @@ export default function Pagination({
           <PaginationItems
             items={paginationItems}
             activePage={activePage}
-            setActivePage={setActivePage}
+            setActivePage={onSetActivePage}
             totalPages={totalPages}
           />
         ) : (
           paginationItems.map((item) => (
-            <PaginationItem key={item} onClick={() => setActivePage(item)}>
+            <PaginationItem key={item} onClick={() => onSetActivePage(item)}>
               <PaginationLink isActive={item === activePage}>
                 {item}
               </PaginationLink>

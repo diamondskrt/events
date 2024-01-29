@@ -34,7 +34,7 @@ export function EventCard({ event }: EventCardProps) {
   const isEventCreator = userId === String(event.organizer._id);
 
   return (
-    <Card>
+    <Card className="relative h-full">
       <Link
         href={`/events/${event._id}`}
         style={{ backgroundImage: `url(${event.imageUrl})` }}
@@ -72,9 +72,11 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="line-clamp-3">{event.description}</p>
+        <div className="pb-[60px]">
+          <p className="line-clamp-3">{event.description}</p>
+        </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="absolute w-full bottom-0">
         <div className="flex justify-between w-full">
           <div className="flex items-center gap-2">
             <Button size="xs" className="rounded-full">
